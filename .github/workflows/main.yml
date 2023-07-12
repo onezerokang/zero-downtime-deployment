@@ -5,10 +5,6 @@ name: logging-system
 on:
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: write
-
 env:
   S3_BUCKET_NAME: logging-system-deploy-2
   PROJECT_NAME: playground-logging
@@ -16,6 +12,11 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout
