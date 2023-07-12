@@ -1,21 +1,20 @@
 # logging-deploy.yml
 
 name: logging-system
-
 on:
   workflow_dispatch:
-
 env:
   S3_BUCKET_NAME: logging-system-deploy-2
   PROJECT_NAME: playground-logging
+# permission can be added at job level or workflow level    
+permissions:
+      id-token: write   # This is required for requesting the JWT
+      contents: read    # This is required for actions/checkout
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -45,5 +44,5 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip
 
