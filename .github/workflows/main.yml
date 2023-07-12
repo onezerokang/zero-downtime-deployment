@@ -12,9 +12,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     permissions:
-      id-token: write
       contents: read
       pull-requests: write
 
@@ -48,3 +46,4 @@ jobs:
 
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
+
