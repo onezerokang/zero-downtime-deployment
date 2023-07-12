@@ -5,16 +5,14 @@ on:
   workflow_dispatch:
 env:
   S3_BUCKET_NAME: logging-system-deploy-2
-  PROJECT_NAME: playground-logging
+  AWS_REGION: ap-northeast-2
 # permission can be added at job level or workflow level    
 permissions:
       id-token: write   # This is required for requesting the JWT
       contents: read    # This is required for actions/checkout
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -37,12 +35,11 @@ jobs:
         shell: bash
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: arn:aws:iam::293769980944:user/logging-deploy-user
+          role-session-name: samplerolesession
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip
-
