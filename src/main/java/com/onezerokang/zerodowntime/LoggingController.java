@@ -18,4 +18,9 @@ public class LoggingController {
     public String checkHealth() {
         return "healthy";
     }
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "Hello, World!";
+    }
 }
